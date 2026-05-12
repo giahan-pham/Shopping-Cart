@@ -9,7 +9,7 @@ from core.config import SECRET_KEY, ALGORITHM, ACCESS_TOKEN_EXPIRE_MINUTES
 from core.database import get_session
 from models import User
 
-oauth2_scheme = OAuth2PasswordBearer(tokenUrl="token")
+oauth2_scheme = OAuth2PasswordBearer(tokenUrl="/auth/token")
 
 # Used for user registration: hash the password before storing it in the database
 def get_password_hash(password: str) -> str:

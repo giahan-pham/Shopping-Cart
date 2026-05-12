@@ -9,6 +9,7 @@ from core.security import (
 )
 from models import User, Cart
 from schema import UserCreate, UserRead, UserLogin, TokenResponse
+from fastapi.security import OAuth2PasswordRequestForm
 
 router = APIRouter(prefix="/auth", tags=["auth"])
 
@@ -35,11 +36,11 @@ def register_user(user_create: UserCreate, session: Session = Depends(get_sessio
     return user
 
 # Endpoint for user login and JWT token generation
-@router.post("/login", response_model=TokenResponse)
-def login_user(user_login: UserLogin, session: Session = Depends(get_session)):
-    user = session.exec(select(User).where(User.username == user_login.username)).first()
+@router.post("/token", response_model=TokenResponse)
+def login_user(form_data: OAuth2PasswordRequestForm = Depends(), session: Session = Depends(get_session)):
+    user = session.exec(select(User).where(User.username == form_data.username)).first()
 
-    if not user or not verify_password(user_login.password, user.password_hash):
+    if not user or not verify_password(form_data.password, user.password_hash):
         raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="Invalid username or password")
     
     access_token = create_access_token(data={
