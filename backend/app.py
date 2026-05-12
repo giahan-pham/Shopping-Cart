@@ -7,8 +7,12 @@ from core.security import get_password_hash
 from models import User, Cart
 from routes import records as records_router
 from routes import auth as auth_router
+from routes import cart as cart_router
+from routes import admin as admin_router
+from fastapi.middleware.cors import CORSMiddleware
 
-
+#since user shouldnt be able to register as admin, 
+# we will create an admin user with a default password when the application starts.
 def seed_admin_user():
     with Session(engine) as session:
         existing_admin = session.exec(
@@ -35,7 +39,6 @@ def seed_admin_user():
 
         print("Admin user created: username='admin', password='admin'")
 
-
 @asynccontextmanager
 async def lifespan(app: FastAPI):
     create_db_and_tables()
@@ -47,8 +50,27 @@ async def lifespan(app: FastAPI):
 
 app = FastAPI(title="Record Store API", lifespan=lifespan)
 
+#CORS configuration
+origins = [
+    "http://localhost:3000",
+    "http://127.0.0.1:3000",
+    "http://localhost:5173",
+    "http://127.0.0.1:5173",
+]
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=origins,
+    allow_credentials=True,  # Allows cookies and authentication headers in cross-origin requests
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
+
+# Include routers for different API endpoints
 app.include_router(records_router.router)
 app.include_router(auth_router.router)
+app.include_router(cart_router.router)
+app.include_router(admin_router.router)
 
 
 @app.get("/")

@@ -3,8 +3,10 @@ from fastapi import APIRouter, HTTPException, Depends, Response, status
 from sqlmodel import Session, select
 from core.database import get_session
 from models import Cart, CartItem, User, Record
-from schema import CartItemCreate, CartItemRead, CartItemUpdate
+from schema import CartItemCreate, CartItemRead, CartItemUpdate, CartRead
 from core.security import get_current_user
+from decimal import Decimal
+from datetime import datetime, timezone
 
 router = APIRouter(prefix="/cart", tags=["cart"])
 
@@ -17,7 +19,8 @@ def build_cart_item_read(cart_item: CartItem, record: Record) -> CartItemRead:
         artist=record.artist,
         price=record.price,
         quantity=cart_item.quantity,
-        subtotal=record.price * cart_item.quantity
+        subtotal=record.price * cart_item.quantity,
+        image_url=record.image_url
     )
 
 # Helper function to get the current user's cart
@@ -28,18 +31,23 @@ def get_user_cart(user_id: int, session: Session) -> Cart:
     return cart
 
 #endpoint to get current user's cart details
-@router.get("/", response_model=List[CartItemRead])
+@router.get("/", response_model=CartRead)
 def get_cart(current_user: User = Depends(get_current_user), session: Session = Depends(get_session)):
     cart = get_user_cart(current_user.id, session)
-    #join CartItem with Record using record id to get the record details for each cart item
+    # join CartItem with Record using record id to get the record details for each cart item
     cart_items = session.exec(
         select(CartItem, Record).join(Record, CartItem.record_id == Record.id)
         .where(CartItem.cart_id == cart.id)
     ).all()
-    return [
+
+    items = [
         build_cart_item_read(cart_item=cart_item, record=record)
         for cart_item, record in cart_items
     ]
+
+    # calculate total as sum of subtotals (do not persist total on Cart)
+    total = sum((item.subtotal for item in items), Decimal(0))
+    return CartRead(items=items, total=total, updated_at=cart.updated_at)
 
 #endpoint to add an item to the cart
 @router.post("/items", response_model=CartItemRead, status_code=status.HTTP_201_CREATED)

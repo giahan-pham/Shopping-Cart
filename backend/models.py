@@ -14,7 +14,8 @@ class User(SQLModel, table=True):
 class Cart(SQLModel, table=True):
     id: int | None = Field(default=None, primary_key=True)
     user_id: int = Field(foreign_key="user.id")
-
+    updated_at: datetime = Field(default_factory=lambda: datetime.now(timezone.utc))
+    
 class Record(SQLModel, table=True):
     id: int | None = Field(default=None, primary_key=True)
     title: str = Field(max_length=150)
@@ -24,6 +25,7 @@ class Record(SQLModel, table=True):
     stock: int = Field(ge=0)
     release_year: int
     description: str = Field(max_length=1000)
+    image_url: str = Field(default= "/images/stock_default_image.jpg", max_length=255)
     created_at: datetime = Field(default_factory=lambda: datetime.now(timezone.utc))
 
 # association table for many-to-many relationship between Cart and Record

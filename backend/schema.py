@@ -16,6 +16,7 @@ class RecordCreate(SQLModel):
     stock: int = Field(ge=0)
     release_year: int
     description: str = Field(default="", max_length=1000)
+    image_url: str = Field(default="/images/stock_default_image.jpg", max_length=255)
 
 class RecordRead(SQLModel):
     """Response model for returning record details"""
@@ -28,6 +29,7 @@ class RecordRead(SQLModel):
     release_year: int
     created_at: datetime
     description: str
+    image_url: str
 
 class RecordUpdate(SQLModel):
     """Request body for updating record details"""
@@ -38,7 +40,7 @@ class RecordUpdate(SQLModel):
     stock: Optional[int] = Field(default=None, ge=0)
     release_year: Optional[int] = None
     description: Optional[str] = Field(default=None, max_length=1000)
-
+    image_url: Optional[str] = Field(default=None, max_length=255)
 
 #=============================================================
 #Cart item schemas for request and response models
@@ -57,6 +59,7 @@ class CartItemRead(SQLModel):
     price: Decimal
     quantity: int
     subtotal: Decimal
+    image_url: str
 
 class CartItemUpdate(SQLModel):
     """Request body for updating cart item quantity"""
@@ -110,3 +113,14 @@ class AdminCartRead(SQLModel):
     username: str
     role: str
     items: list[AdminCartItemRead]
+    total: Decimal
+    updated_at: datetime
+
+#=============================================================
+#Cart schema for returning user's cart details with totals
+#=============================================================
+class CartRead(SQLModel):
+    """Response model for returning a user's cart with totals"""
+    items: list[CartItemRead]
+    total: Decimal
+    updated_at: datetime

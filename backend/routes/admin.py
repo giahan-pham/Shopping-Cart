@@ -5,6 +5,7 @@ from core.database import get_session
 from models import User, Record, Cart, CartItem
 from schema import AdminCartItemRead, AdminCartRead
 from core.security import admin_required
+from decimal import Decimal
 
 router = APIRouter(prefix="/admin", tags=["admin"])
 
@@ -13,9 +14,9 @@ router = APIRouter(prefix="/admin", tags=["admin"])
 def get_all__user_carts(admin_user: User = Depends(admin_required), 
                         session: Session = Depends(get_session)):
     
-    #join all tables to get all details for admin view
+    # join all tables to get all details for admin view (include Cart to access totals)
     cart_data = session.exec(
-        select(Cart, CartItem, Record)
+        select(User, Cart, CartItem, Record)
         .join(Cart, Cart.user_id == User.id)
         .join(CartItem, CartItem.cart_id == Cart.id)
         .join(Record, Record.id == CartItem.record_id)
@@ -23,13 +24,15 @@ def get_all__user_carts(admin_user: User = Depends(admin_required),
 
     all_users_carts = {}
 
-    for user, cart_item, record in cart_data:
+    for user, cart, cart_item, record in cart_data:
         if user.id not in all_users_carts:
             all_users_carts[user.id] = AdminCartRead(
                 user_id=user.id,
                 username=user.username,
-                role =user.role,
-                items=[]
+                role=user.role,
+                items=[],
+                total=Decimal(0),
+                updated_at=cart.updated_at,
             )
 
         all_users_carts[user.id].items.append(
@@ -40,8 +43,10 @@ def get_all__user_carts(admin_user: User = Depends(admin_required),
                 artist=record.artist,
                 price=record.price,
                 quantity=cart_item.quantity,
-                subtotal=record.price * cart_item.quantity
+                subtotal=record.price * cart_item.quantity,
             )
         )
+        total = sum((item.subtotal for item in all_users_carts[user.id].items), Decimal(0))
+        all_users_carts[user.id].total = total
 
     return list(all_users_carts.values())
