@@ -2,14 +2,17 @@ from typing import List
 from fastapi import APIRouter, HTTPException, Depends, Response, status
 from sqlmodel import Session, select
 from core.database import get_session
-from models import Record
+from models import Record, User
 from schema import RecordCreate, RecordRead, RecordUpdate
+from core.security import admin_required
 
 router = APIRouter(prefix="/records", tags=["records"])
 
 #endpoint to create a new record
 @router.post("/", response_model=RecordRead, status_code=status.HTTP_201_CREATED)
-def create_record(record_create: RecordCreate, session: Session = Depends(get_session)):
+def create_record(record_create: RecordCreate, 
+                  session: Session = Depends(get_session), 
+                  admin_user: User = Depends(admin_required)):
     record = Record.model_validate(record_create)
     session.add(record)
     session.commit()
@@ -32,7 +35,9 @@ def get_record(record_id : int, session: Session = Depends(get_session)):
 
 #endpoint to update a record by id
 @router.patch("/{record_id}", response_model = RecordRead)
-def update_record(record_id: int, record_update: RecordUpdate, session: Session = Depends(get_session)):
+def update_record(record_id: int, record_update: RecordUpdate, 
+                  session: Session = Depends(get_session), 
+                  admin_user: User = Depends(admin_required)):
     record = session.get(Record, record_id)
     if not record:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Record not found")
@@ -46,7 +51,9 @@ def update_record(record_id: int, record_update: RecordUpdate, session: Session 
 
 #endpoint to delete a record by id
 @router.delete("/{record_id}", status_code=status.HTTP_204_NO_CONTENT)
-def delete_record(record_id: int, session: Session = Depends(get_session)):
+def delete_record(record_id: int, 
+                  session: Session = Depends(get_session), 
+                  admin_user: User = Depends(admin_required)):
     record = session.get(Record, record_id)
     if not record:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Record not found")
