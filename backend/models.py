@@ -23,6 +23,7 @@ class Record(SQLModel, table=True):
     price: Decimal = Field(sa_column=Column(DECIMAL(10, 2)))
     stock: int = Field(ge=0)
     release_year: int
+    description: str = Field(max_length=1000)
     created_at: datetime = Field(default_factory=lambda: datetime.now(timezone.utc))
 
 # association table for many-to-many relationship between Cart and Record
