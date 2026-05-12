@@ -51,6 +51,7 @@ class CartItemCreate(SQLModel):
 class CartItemRead(SQLModel):
     """Response model for returning cart item details"""
     id: int
+    record_id: int
     title: str
     artist: str
     price: Decimal
@@ -89,3 +90,23 @@ class TokenResponse(SQLModel):
     user_id: int
     username: str
     role: str
+
+#=============================================================
+#Admin schema to view all user carts
+#=============================================================
+class AdminCartItemRead(SQLModel):
+    """cart item details for admin view"""
+    cart_item_id: int
+    record_id: int
+    title: str
+    artist: str
+    price: Decimal
+    quantity: int
+    subtotal: Decimal
+
+class AdminCartRead(SQLModel):
+    """user cart details for admin view"""
+    user_id: int
+    username: str
+    role: str
+    items: list[AdminCartItemRead]
