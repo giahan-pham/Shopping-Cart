@@ -75,6 +75,7 @@ def add_item_to_cart(cart_item_create: CartItemCreate,
             raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail="Not enough stock available")
         
         existing_item.quantity = new_quantity
+        cart.updated_at = datetime.now(timezone.utc)
         session.add(existing_item)
         session.commit()
         session.refresh(existing_item)
@@ -90,13 +91,14 @@ def add_item_to_cart(cart_item_create: CartItemCreate,
         quantity=cart_item_create.quantity
     )
 
+    cart.updated_at = datetime.now(timezone.utc)
     session.add(cart_item)
     session.commit()
     session.refresh(cart_item)
     return build_cart_item_read(cart_item, record)
 
 #endpoint to update the quantity of an item in the cart
-@router.patch("/items/{item_id}", response_model=CartItemRead)
+@router.patch("/items/{cart_item_id}", response_model=CartItemRead)
 def update_cart_item(cart_item_id: int, 
                      cart_item_update: CartItemUpdate, 
                      current_user: User = Depends(get_current_user), 
@@ -115,13 +117,14 @@ def update_cart_item(cart_item_id: int,
         raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail="Not enough stock available")
 
     cart_item.quantity = cart_item_update.quantity
+    cart.updated_at = datetime.now(timezone.utc)
     session.add(cart_item)
     session.commit()
     session.refresh(cart_item)
     return build_cart_item_read(cart_item, record)
 
 #endpoint to remove an item from the cart
-@router.delete("/items/{item_id}", status_code=status.HTTP_204_NO_CONTENT)
+@router.delete("/items/{cart_item_id}", status_code=status.HTTP_204_NO_CONTENT)
 def delete_cart_item(cart_item_id: int, 
                      current_user: User = Depends(get_current_user), 
                      session: Session = Depends(get_session)):
@@ -132,6 +135,7 @@ def delete_cart_item(cart_item_id: int,
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Cart item not found")
 
     session.delete(cart_item)
+    cart.updated_at = datetime.now(timezone.utc)
     session.commit()
     return Response(status_code=status.HTTP_204_NO_CONTENT)
 
@@ -143,6 +147,7 @@ def clear_cart(current_user: User = Depends(get_current_user), session: Session 
     for cart_item in cart_items:
         session.delete(cart_item)
 
+    cart.updated_at = datetime.now(timezone.utc)
     session.commit()
 
     return Response(status_code=status.HTTP_204_NO_CONTENT)

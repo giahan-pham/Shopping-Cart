@@ -2,6 +2,7 @@ from sqlmodel import SQLModel, Field
 from datetime import datetime
 from decimal import Decimal
 from typing import Optional
+from pydantic import field_validator
 
 #=============================================================
 #Record schemas for request and response models
@@ -12,11 +13,11 @@ class RecordCreate(SQLModel):
     title: str = Field(max_length=150)
     artist: str = Field(max_length=100)
     genre: str = Field(max_length=50)
-    price: Decimal
+    price: Decimal = Field(gt=0)
     stock: int = Field(ge=0)
     release_year: int
     description: str = Field(default="", max_length=1000)
-    image_url: str = Field(default="/images/stock_default_image.jpg", max_length=255)
+    image_url: str = Field(default="backend/media/static/stock_default_image.jpg", max_length=255)
 
 class RecordRead(SQLModel):
     """Response model for returning record details"""
@@ -41,6 +42,13 @@ class RecordUpdate(SQLModel):
     release_year: Optional[int] = None
     description: Optional[str] = Field(default=None, max_length=1000)
     image_url: Optional[str] = Field(default=None, max_length=255)
+
+    @field_validator('price')
+    @classmethod
+    def price_must_be_positive(cls, v):
+        if v is not None and v <= 0:
+            raise ValueError('price must be greater than 0')
+        return v
 
 #=============================================================
 #Cart item schemas for request and response models

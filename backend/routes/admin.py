@@ -10,6 +10,8 @@ from decimal import Decimal
 router = APIRouter(prefix="/admin", tags=["admin"])
 
 #endpoint to get all carts with their items for admin view
+# Note: only returns carts that have at least one item (inner join).
+# Users with empty carts are excluded from the results.
 @router.get("/user_carts", response_model=List[AdminCartRead])
 def get_all__user_carts(admin_user: User = Depends(admin_required), 
                         session: Session = Depends(get_session)):

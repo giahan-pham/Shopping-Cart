@@ -25,7 +25,7 @@ class Record(SQLModel, table=True):
     stock: int = Field(ge=0)
     release_year: int
     description: str = Field(max_length=1000)
-    image_url: str = Field(default= "/images/stock_default_image.jpg", max_length=255)
+    image_url: str = Field(default= "backend/media/static/stock_default_image.jpg", max_length=255)
     created_at: datetime = Field(default_factory=lambda: datetime.now(timezone.utc))
 
 # association table for many-to-many relationship between Cart and Record

@@ -1,4 +1,8 @@
+import os
+from pathlib import Path
+from backend.core.config import ADMIN_PASSWORD, ADMIN_USERNAME
 from fastapi import FastAPI
+from fastapi.staticfiles import StaticFiles
 from contextlib import asynccontextmanager
 from sqlmodel import Session, select
 
@@ -14,18 +18,21 @@ from fastapi.middleware.cors import CORSMiddleware
 #since user shouldnt be able to register as admin, 
 # we will create an admin user with a default password when the application starts.
 def seed_admin_user():
+    admin_username = ADMIN_USERNAME
+    admin_password = ADMIN_PASSWORD
+
     with Session(engine) as session:
         existing_admin = session.exec(
-            select(User).where(User.username == "admin")
+            select(User).where(User.username == admin_username)
         ).first()
 
         if existing_admin:
-            print("Admin user already exists")
+            print(f"Admin user '{admin_username}' already exists")
             return
 
         admin_user = User(
-            username="admin",
-            password_hash=get_password_hash("admin"),
+            username=admin_username,
+            password_hash=get_password_hash(admin_password),
             role="admin"
         )
 
@@ -37,7 +44,7 @@ def seed_admin_user():
         session.add(admin_cart)
         session.commit()
 
-        print("Admin user created: username='admin', password='admin'")
+        print(f"Admin user created: username='{admin_username}', password='{admin_password}'")
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
@@ -47,8 +54,13 @@ async def lifespan(app: FastAPI):
     yield
     print("Application shutdown.")
 
+# Ensure upload directories exist before StaticFiles mounts
+Path("static/images/records").mkdir(parents=True, exist_ok=True)
+
 
 app = FastAPI(title="Record Store API", lifespan=lifespan)
+
+app.mount("/images", StaticFiles(directory="static/images"), name="images")
 
 #CORS configuration
 origins = [

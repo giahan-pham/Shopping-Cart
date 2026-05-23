@@ -1,10 +1,14 @@
 from typing import List
-from fastapi import APIRouter, HTTPException, Depends, Response, status
+import uuid
+from pathlib import Path
+from fastapi import APIRouter, HTTPException, Depends, Response, UploadFile, File, status
 from sqlmodel import Session, select
 from core.database import get_session
-from models import Record, User
+from models import Record, User, CartItem
 from schema import RecordCreate, RecordRead, RecordUpdate
 from core.security import admin_required
+
+UPLOAD_DIR = Path("static/images/records")
 
 router = APIRouter(prefix="/records", tags=["records"])
 
@@ -57,6 +61,10 @@ def delete_record(record_id: int,
     record = session.get(Record, record_id)
     if not record:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Record not found")
+    # Delete related cart items first to avoid foreign key constraint violations
+    cart_items = session.exec(select(CartItem).where(CartItem.record_id == record_id)).all()
+    for cart_item in cart_items:
+        session.delete(cart_item)
     session.delete(record)
     session.commit()
     return Response(status_code=status.HTTP_204_NO_CONTENT)
