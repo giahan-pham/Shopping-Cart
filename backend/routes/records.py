@@ -1,14 +1,11 @@
 from typing import List
-import uuid
-from pathlib import Path
 from fastapi import APIRouter, HTTPException, Depends, Response, UploadFile, File, status
 from sqlmodel import Session, select
 from core.database import get_session
 from models import Record, User, CartItem
 from schema import RecordCreate, RecordRead, RecordUpdate
 from core.security import admin_required
-
-UPLOAD_DIR = Path("static/images/records")
+from core.upload_utils import save_upload_image
 
 router = APIRouter(prefix="/records", tags=["records"])
 
@@ -68,3 +65,27 @@ def delete_record(record_id: int,
     session.delete(record)
     session.commit()
     return Response(status_code=status.HTTP_204_NO_CONTENT)
+
+#endpoint to upload an image for a record
+@router.patch("/{record_id}/image", response_model=RecordRead)
+async def upload_record_image(
+    record_id: int,
+    file: UploadFile = File(...),
+    session: Session = Depends(get_session),
+    admin_user: User = Depends(admin_required),
+):
+    record = session.get(Record, record_id)
+
+    if not record:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail="Record not found",
+        )
+
+    record.image_url = await save_upload_image(file)
+
+    session.add(record)
+    session.commit()
+    session.refresh(record)
+
+    return record

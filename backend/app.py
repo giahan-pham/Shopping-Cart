@@ -60,7 +60,9 @@ Path("static/images/records").mkdir(parents=True, exist_ok=True)
 
 app = FastAPI(title="Record Store API", lifespan=lifespan)
 
-app.mount("/images", StaticFiles(directory="static/images"), name="images")
+# Ensure upload directories exist before StaticFiles mounts
+Path("media/static/records").mkdir(parents=True, exist_ok=True)
+app.mount("/static", StaticFiles(directory="media/static"), name="static")
 
 #CORS configuration
 origins = [
