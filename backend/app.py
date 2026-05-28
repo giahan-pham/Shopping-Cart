@@ -1,6 +1,6 @@
 import os
 from pathlib import Path
-from backend.core.config import ADMIN_PASSWORD, ADMIN_USERNAME
+from core.config import ADMIN_PASSWORD, ADMIN_USERNAME
 from fastapi import FastAPI
 from fastapi.staticfiles import StaticFiles
 from contextlib import asynccontextmanager
