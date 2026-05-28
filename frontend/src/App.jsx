@@ -2,9 +2,8 @@ import { Routes, Route, Navigate, useLocation } from "react-router-dom";
 
 import NavBar from "./components/NavBar";
 
-import LoginPage from "./pages/LoginPage";
-import RegisterPage from "./pages/RegisterPage";
-import RecordShopping from "./pages/RecordShoppingPage";
+import AuthPage from "./pages/AuthPage";
+import RecordShoppingPage from "./pages/RecordShoppingPage";
 import CartPage from "./pages/CartPage";
 
 import ManageRecords from "./pages/admin/ManageRecords";
@@ -15,17 +14,26 @@ import ProtectedRoute from "./components/ProtectedRoute";
 import "./App.css";
 
 function App() {
-  const location = useLocation();
-  const hideNavBar = location.pathname === "/login" || location.pathname === "/register";
-  
   return (
     <div className="App">
-      {!hideNavBar && <NavBar />}
+      <NavBar />
+
       <Routes>
         <Route path="/" element={<Navigate to="/records" />} />
-        <Route path="/login" element={<LoginPage />} />
-        <Route path="/records" element={<RecordShopping />} />
-        <Route path="/cart" element={<CartPage />} />
+
+        {/* Public routes */}
+        <Route path="/auth" element={<AuthPage />} />
+        <Route path="/records" element={<RecordShoppingPage />} />
+
+        {/* Logged-in user routes */}
+        <Route
+          path="/cart"
+          element={
+            <ProtectedRoute>
+              <CartPage />
+            </ProtectedRoute>
+          }
+        />
 
         {/* Admin routes */}
         <Route
@@ -36,6 +44,7 @@ function App() {
             </ProtectedRoute>
           }
         />
+
         <Route
           path="/admin/carts"
           element={
