@@ -10,7 +10,7 @@ export async function getCart() {
     });
 }
 
-export async function addItemToCart(recordId, quantity) {
+export async function addItemToCart(recordId, quantity = 1) {
     return request("/cart/items", {
         method: "POST",
         headers: {
@@ -21,14 +21,14 @@ export async function addItemToCart(recordId, quantity) {
     });
 }
 
-export async function updateCartItem(cartItemId, recordId, quantity) {
+export async function updateCartItem(cartItemId, quantity) {
     return request(`/cart/items/${cartItemId}`, {
         method: "PATCH",
         headers: {
             "Content-Type": "application/json",
             ...getAuthHeaders(),
         },
-        body: JSON.stringify({ record_id: recordId, quantity }),
+        body: JSON.stringify({ quantity }),
     });
 }
 
@@ -36,10 +36,8 @@ export async function deleteCartItem(cartItemId) {
     return request(`/cart/items/${cartItemId}`, {
         method: "DELETE",
         headers: {
-            "Content-Type": "application/json",
             ...getAuthHeaders(),
         },
-        body: JSON.stringify({ record_id: cartItemId }),
     });
 }
 

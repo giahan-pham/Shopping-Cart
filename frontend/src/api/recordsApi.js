@@ -25,7 +25,7 @@ export async function createRecord(recordData) {
 
 export async function updateRecord(recordId, recordData) {
     return request(`/records/${recordId}`, {
-        method: "PUT",
+        method: "PATCH",
         headers: {
             "Content-Type": "application/json",
             ...getAuthHeaders(),
@@ -45,9 +45,9 @@ export async function deleteRecord(recordId) {
 
 export async function uploadRecordImage(recordId, imageFile) {
     const formData = new FormData();
-    formData.append("image", imageFile);
+    formData.append("file", imageFile);
 
-    return request(`/records/${recordId}/upload-image`, {
+    return request(`/records/${recordId}/image`, {
         method: "PATCH",
         headers: {
             ...getAuthHeaders(),
