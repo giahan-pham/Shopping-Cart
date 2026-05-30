@@ -1,4 +1,3 @@
-import os
 from pathlib import Path
 from core.config import ADMIN_PASSWORD, ADMIN_USERNAME
 from fastapi import FastAPI
@@ -54,15 +53,14 @@ async def lifespan(app: FastAPI):
     yield
     print("Application shutdown.")
 
-# Ensure upload directories exist before StaticFiles mounts
-Path("static/images/records").mkdir(parents=True, exist_ok=True)
+BASE_DIR = Path(__file__).resolve().parent
+STATIC_DIR = BASE_DIR / "media" / "static"
+RECORDS_STATIC_DIR = STATIC_DIR / "records"
 
+RECORDS_STATIC_DIR.mkdir(parents=True, exist_ok=True)
 
 app = FastAPI(title="Record Store API", lifespan=lifespan)
-
-# Ensure upload directories exist before StaticFiles mounts
-Path("media/static/records").mkdir(parents=True, exist_ok=True)
-app.mount("/static", StaticFiles(directory="media/static"), name="static")
+app.mount("/static", StaticFiles(directory=str(STATIC_DIR)), name="static")
 
 #CORS configuration
 origins = [

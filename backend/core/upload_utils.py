@@ -5,9 +5,16 @@ from uuid import uuid4
 from fastapi import HTTPException, UploadFile, status
 from PIL import Image, ImageOps, UnidentifiedImageError
 
-UPLOAD_DIR = Path("media/static/records")
+# backend/core/upload_utils.py -> backend/
+BASE_DIR = Path(__file__).resolve().parents[1]
+
+STATIC_DIR = BASE_DIR / "media" / "static"
+UPLOAD_DIR = STATIC_DIR / "records"
+
 MAX_FILE_SIZE = 5 * 1024 * 1024  # 5 MB
 ALLOWED_CONTENT_TYPES = {"image/jpeg", "image/png", "image/webp"}
+
+DEFAULT_RECORD_IMAGE_URL = "/static/records/stock_default_image.jpg"
 
 
 async def save_upload_image(file: UploadFile) -> str:

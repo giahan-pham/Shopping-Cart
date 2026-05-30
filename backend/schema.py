@@ -17,7 +17,7 @@ class RecordCreate(SQLModel):
     stock: int = Field(ge=0)
     release_year: int
     description: str = Field(default="", max_length=1000)
-    image_url: str = Field(default="backend/media/static/stock_default_image.jpg", max_length=255)
+    image_url: str = Field(default="/static/records/stock_default_image.jpg", max_length=255)
 
 class RecordRead(SQLModel):
     """Response model for returning record details"""
