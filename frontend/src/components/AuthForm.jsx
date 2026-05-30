@@ -4,14 +4,11 @@ import { loginUser, registerUser, saveAuthData } from "../api/authApi";
 
 import "./AuthForm.css";
 
-function AuthForm({ mode, setMode }) {
+function AuthForm({ mode, setMode, showToast }) {
   const navigate = useNavigate();
 
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
-
-  const [errorMessage, setErrorMessage] = useState("");
-  const [successMessage, setSuccessMessage] = useState("");
 
   const isLogin = mode === "login";
 
@@ -19,16 +16,11 @@ function AuthForm({ mode, setMode }) {
   useEffect(() => {
     setUsername("");
     setPassword("");
-    setErrorMessage("");
-    setSuccessMessage("");
   }, [mode]);
 
 
   async function handleSubmit(event) {
     event.preventDefault();
-
-    setErrorMessage("");
-    setSuccessMessage("");
 
     try {
       if (isLogin) {
@@ -44,28 +36,18 @@ function AuthForm({ mode, setMode }) {
       } else {
         await registerUser({ username, password });
 
-        setSuccessMessage(
-          "Account created successfully. Please log in."
-        );
+        showToast?.("Account created successfully. Please log in.", "success");
 
         setMode("login");
       }
     } catch (error) {
-      setErrorMessage(error.message);
+      showToast?.(error.message, "error");
     }
   }
 
   return (
     <form className="auth-form" onSubmit={handleSubmit}>
       <h2>{isLogin ? "Login" : "Register"}</h2>
-
-      {errorMessage && (
-        <p className="error-message">{errorMessage}</p>
-      )}
-
-      {successMessage && (
-        <p className="success-message">{successMessage}</p>
-      )}
 
       <label>
         Username
@@ -96,11 +78,7 @@ function AuthForm({ mode, setMode }) {
         <button
           type="button"
           className="auth-switch-button"
-          onClick={() => {
-            setErrorMessage("");
-            setSuccessMessage("");
-            setMode(isLogin ? "register" : "login");
-          }}
+          onClick={() => setMode(isLogin ? "register" : "login")}
         >
           {isLogin ? "Create an account" : "Log in"}
         </button>

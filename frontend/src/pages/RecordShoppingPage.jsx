@@ -26,8 +26,6 @@ function RecordShoppingPage({ setCart, openCartPanel, showToast }) {
   const [selectedRecord, setSelectedRecord] = useState(null);
   const [isLoginWarningOpen, setIsLoginWarningOpen] = useState(false);
 
-  const [cartErrorMessage, setCartErrorMessage] = useState("");
-
   const [isLoading, setIsLoading] = useState(true);
   const [errorMessage, setErrorMessage] = useState("");
 
@@ -60,7 +58,6 @@ function RecordShoppingPage({ setCart, openCartPanel, showToast }) {
   async function handleAddToCart(record, quantity = 1) {
     if (Number(record.stock) <= 0) {
       const message = `${record.title} is out of stock.`;
-      setCartErrorMessage(message);
       showToast?.(message, "error");
       return;
     }
@@ -73,8 +70,6 @@ function RecordShoppingPage({ setCart, openCartPanel, showToast }) {
     const safeQuantity = Number.isInteger(quantity) && quantity > 0 ? quantity : 1;
 
     try {
-      setCartErrorMessage("");
-
       await addItemToCart(record.id, safeQuantity);
 
       const updatedCart = await getCart();
@@ -85,7 +80,6 @@ function RecordShoppingPage({ setCart, openCartPanel, showToast }) {
       setSelectedRecord(null);
     } catch (error) {
       // Handle errors when adding to cart
-      setCartErrorMessage(error.message);
       showToast?.(error.message, "error");
     }
   }
@@ -104,7 +98,6 @@ function RecordShoppingPage({ setCart, openCartPanel, showToast }) {
       {isLoading && <p>Loading records...</p>}
 
       {errorMessage && <p className="error-message">{errorMessage}</p>}
-      {cartErrorMessage && <p className="error-message">{cartErrorMessage}</p>}
 
       {!isLoading && !errorMessage && records.length === 0 && (
         <p>No records available yet.</p>

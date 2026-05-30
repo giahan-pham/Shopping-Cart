@@ -5,7 +5,7 @@ import AuthForm from "../components/AuthForm";
 import "./AuthPage.css";
 
 //Auth page where user can switch between login and register form using tabs
-function AuthPage() {
+function AuthPage({ showToast }) {
   const [mode, setMode] = useState("login");
 
   return (
@@ -31,7 +31,7 @@ function AuthPage() {
           </button>
         </div>
 
-        <AuthForm mode={mode} setMode={setMode} />
+        <AuthForm mode={mode} setMode={setMode} showToast={showToast} />
       </section>
     </main>
   );
