@@ -1,0 +1,182 @@
+.cart-item-card {
+	display: grid;
+	grid-template-columns: 5.5rem minmax(0, 1fr);
+	gap: 0.875rem;
+	padding: 0.875rem 0;
+	border-bottom: 1px solid var(--color-border);
+	background: transparent;
+}
+
+.cart-item-image-wrapper {
+	width: 100%;
+	aspect-ratio: 1 / 1;
+	border-radius: var(--radius-small);
+	overflow: hidden;
+	border: 1px solid var(--color-border);
+	background: var(--color-surface);
+}
+
+.cart-item-image {
+	width: 100%;
+	height: 100%;
+	object-fit: cover;
+	display: block;
+}
+
+.cart-item-main {
+	min-width: 0;
+	display: flex;
+	flex-direction: column;
+}
+
+.cart-item-header-row {
+	display: flex;
+	justify-content: space-between;
+	align-items: flex-start;
+	gap: 0.75rem;
+}
+
+.cart-item-title {
+	margin: 0;
+	font-size: 0.97rem;
+	line-height: 1.3;
+	font-weight: 700;
+	color: var(--color-text);
+}
+
+.cart-item-artist {
+	margin: 0.25rem 0 0;
+	color: var(--color-muted);
+	font-size: 0.85rem;
+}
+
+.cart-item-price-line {
+	margin: 0.188rem 0 0;
+	color: var(--color-text);
+	font-size: 0.88rem;
+	font-weight: 700;
+}
+
+.cart-item-controls {
+	margin-top: 0.5rem;
+	display: flex;
+	align-items: center;
+	gap: 0.625rem;
+}
+
+.cart-quantity-controls {
+	display: inline-flex;
+	align-items: center;
+	gap: 0.75rem;
+}
+
+.cart-quantity-label {
+	font-size: 0.84rem;
+	color: var(--color-muted);
+}
+
+.cart-quantity-controls button {
+	width: 1.875rem;
+	height: 1.875rem;
+	border: none;
+	border-radius: 0;
+	background: transparent;
+	color: #9ca3af;
+	font-size: 1.7rem;
+	line-height: 1;
+	cursor: pointer;
+}
+
+.cart-quantity-controls button:hover:not(:disabled) {
+	color: #374151;
+}
+
+.cart-quantity-controls button:disabled {
+	opacity: 0.45;
+	cursor: not-allowed;
+}
+
+.cart-item-quantity-input {
+	width: 2.75rem;
+	height: 1.875rem;
+	padding: 0;
+	border: none;
+	border-radius: 0;
+	text-align: center;
+	font-weight: 600;
+	font-size: 1.05rem;
+	background: transparent;
+	color: var(--color-text);
+	appearance: textfield;
+	-moz-appearance: textfield;
+}
+
+.cart-item-quantity-input::-webkit-outer-spin-button,
+.cart-item-quantity-input::-webkit-inner-spin-button {
+	-webkit-appearance: none;
+	margin: 0;
+}
+
+.cart-item-quantity-input:disabled {
+	opacity: 0.5;
+	cursor: not-allowed;
+}
+
+.cart-item-delete {
+	border: none;
+	border-radius: 0;
+	width: auto;
+	height: auto;
+	background: transparent;
+	color: #b4b4b4;
+	cursor: pointer;
+	font-size: 2.25rem;
+	line-height: 1;
+	padding: 0;
+	flex-shrink: 0;
+}
+
+.cart-item-delete:hover:not(:disabled) {
+	color: #7a7a7a;
+}
+
+.cart-item-delete:disabled {
+	opacity: 0.5;
+	cursor: not-allowed;
+}
+
+@media (max-width: 700px) {
+	.cart-item-card {
+		grid-template-columns: 4.875rem minmax(0, 1fr);
+		gap: 0.75rem;
+	}
+
+	.cart-item-title {
+		font-size: 0.92rem;
+	}
+
+	.cart-item-artist,
+	.cart-item-price-line {
+		font-size: 0.95rem;
+	}
+}
+
+@media (max-width: 480px) {
+	.cart-item-card {
+		grid-template-columns: 5.25rem minmax(0, 1fr);
+		gap: 0.75rem;
+	}
+
+	.cart-item-controls {
+		margin-top: 0.625rem;
+	}
+
+	.cart-quantity-controls {
+		gap: 0.5rem;
+		flex-wrap: wrap;
+	}
+
+	.cart-item-delete {
+		font-size: 1.95rem;
+	}
+}
