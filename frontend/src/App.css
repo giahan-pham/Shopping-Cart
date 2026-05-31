@@ -1,0 +1,7 @@
+.App {
+	min-height: 100%;
+}
+
+.App > .error-message {
+	margin: 0.75rem 1.25rem 0;
+}
