@@ -59,7 +59,7 @@ function NavBar({ onOpenCart }) {
 
             <button
               type="button"
-              className="navbar-button"
+              className="navbar-button navbar-button-logout"
               onClick={() => setIsConfirmLogoutOpen(true)}
             >
               Logout
