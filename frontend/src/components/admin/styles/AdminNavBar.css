@@ -1,0 +1,120 @@
+.admin-sidebar {
+	width: 16.25rem;
+	padding: 1.5rem;
+	background: linear-gradient(180deg, #0f172a 0%, #111827 100%);
+	color: #fff;
+	border-right: 1px solid #1f2937;
+	display: flex;
+	flex-direction: column;
+	gap: 1.125rem;
+}
+
+.admin-sidebar-header {
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	gap: 0.75rem;
+}
+
+.admin-logo {
+	margin: 0;
+	font-size: 1.34rem;
+	font-weight: 800;
+	line-height: 1.2;
+}
+
+.admin-menu-toggle {
+	display: none;
+	width: 2.5rem;
+	height: 2.5rem;
+	border: 1px solid #334155;
+	border-radius: 0.625rem;
+	background: rgba(148, 163, 184, 0.12);
+	color: #fff;
+	cursor: pointer;
+	align-items: center;
+	justify-content: center;
+	font-size: 1rem;
+}
+
+.admin-nav {
+	display: flex;
+	flex-direction: column;
+	align-items: stretch;
+	gap: 0.5rem;
+	flex: 1;
+}
+
+.admin-nav-link,
+.admin-logout-button {
+	border: none;
+	border-radius: 0.625rem;
+	width: 100%;
+	padding: 0.625rem 0.875rem;
+	font-size: 1.15rem;
+	color: #e5e7eb;
+	text-decoration: none;
+	background: transparent;
+	text-align: left;
+	font: inherit;
+	font-weight: 600;
+	cursor: pointer;
+	display: flex;
+	align-items: center;
+	gap: 0.5rem;
+}
+
+.admin-nav-icon {
+	flex-shrink: 0;
+	font-size: 0.95rem;
+}
+
+.admin-nav-link:hover,
+.admin-logout-button:hover {
+	background: #1f2937;
+}
+
+.admin-nav-link.active {
+	background: var(--color-primary);
+	color: #fff;
+	box-shadow: none;
+}
+
+.admin-logout-button {
+	margin-top: auto;
+	color: #fecaca;
+	justify-content: center;
+	text-align: center;
+}
+
+.admin-logout-button:hover {
+	background: rgba(193, 18, 31, 0.28);
+}
+
+@media (max-width: 900px) {
+	.admin-sidebar {
+		width: 100%;
+		padding: 0.875rem 1rem;
+		border-right: none;
+		border-bottom: 1px solid #1f2937;
+		gap: 0.75rem;
+	}
+
+	.admin-menu-toggle {
+		display: inline-flex;
+	}
+
+	.admin-nav {
+		display: none;
+		gap: 0.5rem;
+		flex: unset;
+	}
+
+	.admin-nav.admin-nav-open {
+		display: flex;
+	}
+
+	.admin-logout-button {
+		margin-top: 0.5rem;
+	}
+}

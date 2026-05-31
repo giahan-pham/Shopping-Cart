@@ -1,0 +1,115 @@
+.admin-record-card {
+	display: flex;
+	justify-content: space-between;
+	gap: 0.75rem;
+	padding: 0.75rem;
+	border-radius: var(--radius-medium);
+	border: 1px solid var(--color-border);
+	background: var(--color-surface);
+}
+
+.admin-record-card--highlight {
+	border-color: var(--color-primary);
+	box-shadow: 0 0 0 3px rgba(144, 0, 0, 0.12);
+}
+
+.admin-record-left {
+	display: flex;
+	align-items: center;
+	gap: 0.75rem;
+	min-width: 0;
+}
+
+.admin-record-image {
+	width: 4.5rem;
+	height: 4.5rem;
+	flex-shrink: 0;
+	border-radius: var(--radius-small);
+	overflow: hidden;
+	border: 1px solid var(--color-border);
+	background: var(--color-surface-soft);
+}
+
+.admin-record-left h3 {
+	margin: 0 0 0.188rem;
+	font-size: 0.95rem;
+	line-height: 1.28;
+	color: var(--color-text);
+}
+
+.admin-record-left p {
+	margin: 0.125rem 0;
+	color: var(--color-muted);
+	font-size: 0.84rem;
+}
+
+.admin-record-meta {
+	text-align: right;
+	font-weight: 500;
+	min-width: 10.625rem;
+}
+
+.admin-record-meta p {
+	margin: 0.125rem 0;
+	font-size: 0.84rem;
+}
+
+.admin-record-stock-status {
+	font-weight: 700;
+	font-size: 0.82rem;
+}
+
+.admin-record-stock-status.in-stock {
+	color: var(--color-success);
+}
+
+.admin-record-stock-status.out-stock {
+	color: var(--color-danger);
+}
+
+.admin-record-buttons {
+	display: flex;
+	justify-content: flex-end;
+	gap: 0.438rem;
+	margin-top: 0.5rem;
+}
+
+.admin-record-buttons button {
+	border: 1px solid var(--color-border);
+	border-radius: var(--radius-small);
+	padding: 0.313rem 0.563rem;
+	font-size: 0.8rem;
+	font-weight: 600;
+	background: var(--color-surface);
+	color: var(--color-text);
+	cursor: pointer;
+}
+
+.admin-record-buttons button:hover {
+	background: var(--color-surface-soft);
+}
+
+.admin-record-buttons .danger-button {
+	border-color: color-mix(in srgb, var(--color-danger) 45%, transparent 55%);
+	background: var(--color-danger-bg);
+	color: var(--color-danger);
+}
+
+.admin-record-buttons .danger-button:hover {
+	background: #ffe8ec;
+	color: color-mix(in srgb, var(--color-danger) 82%, black 18%);
+}
+
+@media (max-width: 760px) {
+	.admin-record-card {
+		flex-direction: column;
+	}
+
+	.admin-record-meta {
+		text-align: left;
+	}
+
+	.admin-record-buttons {
+		justify-content: flex-start;
+	}
+}
