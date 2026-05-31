@@ -127,6 +127,7 @@ function RecordShoppingPage({ setCart, openCartPanel, showToast }) {
         record={selectedRecord}
         onClose={() => setSelectedRecord(null)}
         onAddToCart={handleAddToCart}
+        showToast={showToast}
       />
 
       <LoginWarning
