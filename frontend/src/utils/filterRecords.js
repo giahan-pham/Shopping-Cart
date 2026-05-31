@@ -15,10 +15,10 @@ export function filterRecords(records, searchTerm) {
 		const combinedReverse = `${artist} ${title}`.trim();
 
 		return (
-			title.startsWith(normalisedSearch) ||
-			artist.startsWith(normalisedSearch) ||
-			combined.startsWith(normalisedSearch) ||
-			combinedReverse.startsWith(normalisedSearch)
+			title.includes(normalisedSearch) ||
+			artist.includes(normalisedSearch) ||
+			combined.includes(normalisedSearch) ||
+			combinedReverse.includes(normalisedSearch)
 		);
 	});
 }
