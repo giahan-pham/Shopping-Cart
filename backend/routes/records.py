@@ -5,9 +5,25 @@ from core.database import get_session
 from models import Record, User, CartItem
 from schema import RecordCreate, RecordRead, RecordUpdate
 from core.security import admin_required
-from core.upload_utils import save_upload_image
+from core.upload_utils import (
+    DEFAULT_RECORD_IMAGE_URL,
+    delete_uploaded_image_file,
+    save_upload_image,
+)
 
 router = APIRouter(prefix="/records", tags=["records"])
+
+# Delete uploaded image file if no record references it anymore
+def cleanup_unused_record_image(session: Session, image_url: str | None) -> None:
+    if not image_url or image_url == DEFAULT_RECORD_IMAGE_URL:
+        return
+
+    image_still_in_use = session.exec(
+        select(Record.id).where(Record.image_url == image_url).limit(1)
+    ).first()
+
+    if not image_still_in_use:
+        delete_uploaded_image_file(image_url)
 
 #endpoint to create a new record
 @router.post("/", response_model=RecordRead, status_code=status.HTTP_201_CREATED)
@@ -42,12 +58,20 @@ def update_record(record_id: int, record_update: RecordUpdate,
     record = session.get(Record, record_id)
     if not record:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Record not found")
+
+    previous_image_url = record.image_url
+
     record_data = record_update.model_dump(exclude_unset=True)
     for key, value in record_data.items():
         setattr(record, key, value)
+
     session.add(record)
     session.commit()
     session.refresh(record)
+
+    if previous_image_url != record.image_url:
+        cleanup_unused_record_image(session, previous_image_url)
+
     return record
 
 #endpoint to delete a record by id
@@ -58,12 +82,19 @@ def delete_record(record_id: int,
     record = session.get(Record, record_id)
     if not record:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Record not found")
+
+    image_url = record.image_url
+
     # Delete related cart items first to avoid foreign key constraint violations
     cart_items = session.exec(select(CartItem).where(CartItem.record_id == record_id)).all()
     for cart_item in cart_items:
         session.delete(cart_item)
+
     session.delete(record)
     session.commit()
+
+    cleanup_unused_record_image(session, image_url)
+
     return Response(status_code=status.HTTP_204_NO_CONTENT)
 
 #endpoint to upload an image for a record
@@ -82,10 +113,15 @@ async def upload_record_image(
             detail="Record not found",
         )
 
+    previous_image_url = record.image_url
+
     record.image_url = await save_upload_image(file)
 
     session.add(record)
     session.commit()
     session.refresh(record)
+
+    if previous_image_url != record.image_url:
+        cleanup_unused_record_image(session, previous_image_url)
 
     return record
