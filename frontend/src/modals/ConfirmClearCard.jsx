@@ -1,4 +1,4 @@
-import "./styles/ConfirmClearCart.css";
+import "./styles/ConfirmModal.css";
 
 function ConfirmClearCart({
 	isOpen,
@@ -12,8 +12,8 @@ function ConfirmClearCart({
 	}
 
 	return (
-		<div className="confirm-clear-overlay">
-			<div className="confirm-clear-modal">
+		<div className="confirm-overlay">
+			<div className="confirm-modal confirm-modal-compact">
 				<h2>Clear cart?</h2>
 
 				<p>
@@ -21,7 +21,7 @@ function ConfirmClearCart({
 					{itemCount === 1 ? "item" : "items"} from your cart.
 				</p>
 
-				<div className="confirm-clear-actions">
+				<div className="confirm-actions">
 					<button
 						type="button"
 						className="secondary-button"

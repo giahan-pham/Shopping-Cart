@@ -1,4 +1,4 @@
-import "./styles/ConfirmRecordEdit.css";
+import "./styles/ConfirmModal.css";
 
 function ConfirmRecordEdit({
 	isOpen,
@@ -13,15 +13,15 @@ function ConfirmRecordEdit({
 	}
 
 	return (
-		<div className="confirm-edit-overlay">
-			<div className="confirm-edit-modal">
+		<div className="confirm-overlay">
+			<div className="confirm-modal">
 				<h2>Save record changes?</h2>
 
 				<p>
 					Confirm updating this record?
 				</p>
 
-				<div className="confirm-edit-actions">
+				<div className="confirm-actions">
 					<button
 						type="button"
 						className="secondary-button"

@@ -1,4 +1,4 @@
-import "./styles/ConfirmLogout.css";
+import "./styles/ConfirmModal.css";
 
 function ConfirmLogout({ isOpen, onCancel, onConfirm }) {
 	if (!isOpen) {
@@ -6,13 +6,13 @@ function ConfirmLogout({ isOpen, onCancel, onConfirm }) {
 	}
 
 	return (
-		<div className="confirm-logout-overlay">
-			<div className="confirm-logout-modal">
-				<h2>Logout?</h2>
+		<div className="confirm-overlay">
+			<div className="confirm-modal confirm-modal-compact">
+				<h2>Confirm logout</h2>
 
 				<p>Are you sure you want to log out of your account?</p>
 
-				<div className="confirm-logout-actions">
+				<div className="confirm-actions">
 					<button
 						type="button"
 						className="secondary-button"

@@ -1,4 +1,4 @@
-import "./styles/ConfirmRecordDelete.css";
+import "./styles/ConfirmModal.css";
 
 function ConfirmRecordDelete({ record, onCancel, onConfirm, isDeleting }) {
   if (!record) {
@@ -6,8 +6,8 @@ function ConfirmRecordDelete({ record, onCancel, onConfirm, isDeleting }) {
   }
 
   return (
-    <div className="confirm-delete-overlay">
-      <div className="confirm-delete-modal">
+    <div className="confirm-overlay">
+      <div className="confirm-modal">
         <h2>Delete confirmation</h2>
 
         <p>
@@ -15,12 +15,12 @@ function ConfirmRecordDelete({ record, onCancel, onConfirm, isDeleting }) {
           <strong>{record.artist}</strong>?
         </p>
 
-        <p className="delete-warning">
+        <p className="confirm-warning">
           This action cannot be undone. If this record is currently in a user’s
           cart, it may also be removed from that cart.
         </p>
 
-        <div className="delete-modal-actions">
+        <div className="confirm-actions">
           <button
             type="button"
             className="secondary-button"

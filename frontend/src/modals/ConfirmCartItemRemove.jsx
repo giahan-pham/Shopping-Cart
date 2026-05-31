@@ -1,4 +1,4 @@
-import "./styles/ConfirmCartItemRemove.css";
+import "./styles/ConfirmModal.css";
 
 function ConfirmCartItemRemove({ item, onCancel, onConfirm, isSubmitting }) {
 	if (!item) {
@@ -6,15 +6,15 @@ function ConfirmCartItemRemove({ item, onCancel, onConfirm, isSubmitting }) {
 	}
 
 	return (
-		<div className="confirm-remove-overlay">
-			<div className="confirm-remove-modal">
+		<div className="confirm-overlay">
+			<div className="confirm-modal confirm-modal-compact">
 				<h2>Remove item?</h2>
 
 				<p>
 					Remove <strong>{item.title}</strong> from your cart?
 				</p>
 
-				<div className="confirm-remove-actions">
+				<div className="confirm-actions">
 					<button
 						type="button"
 						className="secondary-button"

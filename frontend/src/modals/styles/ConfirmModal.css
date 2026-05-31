@@ -1,0 +1,75 @@
+.confirm-overlay {
+	position: fixed;
+	inset: 0;
+	z-index: var(--z-modal);
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	padding: 1.5rem;
+	background: rgba(0, 0, 0, 0.45);
+}
+
+.confirm-modal {
+	width: min(28.75rem, 100%);
+	padding: 1.5rem;
+	border-radius: var(--radius-large);
+	background: var(--color-surface);
+	box-shadow: var(--shadow-overlay);
+}
+
+/* Kept for modals that were previously slightly narrower */
+.confirm-modal.confirm-modal-compact {
+	width: min(26.25rem, 100%);
+	padding: 1.375rem;
+}
+
+.confirm-modal h2 {
+	margin: 0 0 0.625rem;
+	font-size: 1.35rem;
+	font-weight: 700;
+	color: var(--color-text);
+}
+
+.confirm-modal p {
+	margin: 0;
+	color: var(--color-text);
+}
+
+.confirm-warning {
+	margin-top: 0.75rem;
+	color: var(--color-muted);
+}
+
+.confirm-actions {
+	display: flex;
+	justify-content: flex-end;
+	gap: 0.75rem;
+	margin-top: 1.5rem;
+}
+
+.confirm-actions button {
+	padding: 0.625rem 1rem;
+	border-radius: var(--radius-small);
+	border: none;
+	cursor: pointer;
+}
+
+.confirm-actions .secondary-button {
+	background: var(--color-surface-soft);
+	color: var(--color-text);
+}
+
+.confirm-actions .primary-button {
+	background: var(--color-primary);
+	color: #fff;
+}
+
+.confirm-actions .danger-button {
+	background: var(--color-danger);
+	color: #fff;
+}
+
+.confirm-actions button:disabled {
+	opacity: 0.6;
+	cursor: not-allowed;
+}

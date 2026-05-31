@@ -1,4 +1,4 @@
-import "./styles/LoginWarning.css";
+import "./styles/ConfirmModal.css";
 
 function LoginWarning({ isOpen, onLogin, onContinue }) {
 	if (!isOpen) {
@@ -6,12 +6,12 @@ function LoginWarning({ isOpen, onLogin, onContinue }) {
 	}
 
 	return (
-		<div className="login-warning-overlay">
-			<div className="login-warning-modal">
+		<div className="confirm-overlay">
+			<div className="confirm-modal confirm-modal-compact">
 				<h2>Login required</h2>
 				<p>You need an account to add records to your cart.</p>
 
-				<div className="login-warning-actions">
+				<div className="confirm-actions">
 					<button
 						type="button"
 						className="secondary-button"
