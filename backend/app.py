@@ -1,5 +1,5 @@
 from pathlib import Path
-from core.config import ADMIN_PASSWORD, ADMIN_USERNAME
+from core.config import ADMIN_SEED_USERS
 from fastapi import FastAPI
 from fastapi.staticfiles import StaticFiles
 from contextlib import asynccontextmanager
@@ -15,40 +15,51 @@ from routes import admin as admin_router
 from fastapi.middleware.cors import CORSMiddleware
 
 #since user shouldnt be able to register as admin, 
-# we will create an admin user with a default password when the application starts.
-def seed_admin_user():
-    admin_username = ADMIN_USERNAME
-    admin_password = ADMIN_PASSWORD
-
+# we will create admin users with a default password when the application starts.
+def seed_admin_users():
     with Session(engine) as session:
-        existing_admin = session.exec(
-            select(User).where(User.username == admin_username)
-        ).first()
+        for admin_username, admin_password in ADMIN_SEED_USERS:
+            existing_user = session.exec(
+                select(User).where(User.username == admin_username)
+            ).first()
 
-        if existing_admin:
-            print(f"Admin user '{admin_username}' already exists")
-            return
+            if existing_user:
+                if existing_user.role != "admin":
+                    print(
+                        f"User '{admin_username}' exists with role '{existing_user.role}'. "
+                        "Skipping admin seed for this account."
+                    )
+                    continue
 
-        admin_user = User(
-            username=admin_username,
-            password_hash=get_password_hash(admin_password),
-            role="admin"
-        )
+                existing_cart = session.exec(
+                    select(Cart).where(Cart.user_id == existing_user.id)
+                ).first()
+                if not existing_cart:
+                    session.add(Cart(user_id=existing_user.id))
+                    session.commit()
 
-        session.add(admin_user)
-        session.commit()
-        session.refresh(admin_user)
+                print(f"Admin user '{admin_username}' already exists")
+                continue
 
-        admin_cart = Cart(user_id=admin_user.id)
-        session.add(admin_cart)
-        session.commit()
+            admin_user = User(
+                username=admin_username,
+                password_hash=get_password_hash(admin_password),
+                role="admin"
+            )
 
-        print(f"Admin user created: username='{admin_username}', password='{admin_password}'")
+            session.add(admin_user)
+            session.commit()
+            session.refresh(admin_user)
+
+            session.add(Cart(user_id=admin_user.id))
+            session.commit()
+
+            print(f"Admin user created: username='{admin_username}'")
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
     create_db_and_tables()
-    seed_admin_user()
+    seed_admin_users()
     print("Database tables created.")
     yield
     print("Application shutdown.")
