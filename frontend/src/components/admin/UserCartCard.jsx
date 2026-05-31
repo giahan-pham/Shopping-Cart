@@ -52,7 +52,7 @@ function UserCartCard({ userCart }) {
 								</p>
 							</div>
 
-							<p className="user-cart-item-quantity-line">quant: {item.quantity}</p>
+							<p className="user-cart-item-quantity-line">Qty: {item.quantity}</p>
 
 							<p className="user-cart-item-subtotal">{formatCurrency(item.subtotal)}</p>
 						</div>

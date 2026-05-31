@@ -17,7 +17,6 @@
 	box-shadow: var(--shadow-overlay);
 }
 
-/* Kept for modals that were previously slightly narrower */
 .confirm-modal.confirm-modal-compact {
 	width: min(26.25rem, 100%);
 	padding: 1.375rem;

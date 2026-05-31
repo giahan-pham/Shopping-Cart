@@ -1,0 +1,19 @@
+.user-cart-list {
+	display: flex;
+	flex-direction: column;
+	gap: 0.625rem;
+	max-height: min(72vh, 53.75rem);
+	overflow-y: auto;
+	padding-right: 0.25rem;
+}
+
+.user-cart-list::-webkit-scrollbar {
+	width: 8px;
+}
+
+.user-cart-list::-webkit-scrollbar-thumb {
+	border-radius: 999px;
+	border: 2px solid transparent;
+	background: #c0c0c0;
+	background-clip: padding-box;
+}
