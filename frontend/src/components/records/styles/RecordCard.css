@@ -1,0 +1,116 @@
+.record-card {
+	border: 1px solid var(--color-border);
+	border-radius: var(--radius-medium);
+	overflow: hidden;
+	background: var(--color-surface);
+	display: flex;
+	flex-direction: column;
+	min-height: 100%;
+	cursor: pointer;
+	box-shadow: var(--shadow-card);
+	transition:
+		transform 0.2s ease,
+		box-shadow 0.2s ease,
+		border-color 0.2s ease;
+}
+
+.record-card:hover {
+	transform: translateY(-2px);
+	border-color: color-mix(in srgb, var(--color-primary) 36%, var(--color-border) 64%);
+	box-shadow: 0 14px 26px rgba(0, 0, 0, 0.08);
+}
+
+.record-card:focus-visible {
+	outline: none;
+	border-color: var(--color-primary);
+	box-shadow:
+		0 0 0 3px rgba(144, 0, 0, 0.15),
+		0 14px 26px rgba(0, 0, 0, 0.1);
+}
+
+.record-image-wrapper {
+	width: 100%;
+	aspect-ratio: 1 / 1;
+	background: var(--color-surface-soft);
+}
+
+.record-content {
+	display: flex;
+	flex-direction: column;
+	gap: 0.3rem;
+	padding: 0.75rem;
+	flex: 1;
+}
+
+.record-title {
+	margin: 0;
+	font-size: 1rem;
+	line-height: 1.3;
+	font-weight: 700;
+	color: var(--color-text);
+}
+
+.record-artist,
+.record-year {
+	margin: 0;
+	color: var(--color-muted);
+	font-size: 0.86rem;
+}
+
+.record-price {
+	margin: 0.313rem 0 0;
+	font-size: 1rem;
+	font-weight: 700;
+	color: var(--color-text);
+}
+
+.record-add-button {
+	margin-top: auto;
+	border: none;
+	border-radius: var(--radius-small);
+	padding: 0.5rem 0.688rem;
+	background: var(--color-danger);
+	color: #fff;
+	font-size: 0.86rem;
+	font-weight: 700;
+	cursor: pointer;
+}
+
+.record-add-button:hover {
+	background: color-mix(in srgb, var(--color-danger) 82%, black 18%);
+}
+
+.record-add-button-disabled,
+.record-add-button-disabled:hover {
+	border-color: #cfcfcf;
+	background: #efefef;
+	color: #9ca3af;
+	cursor: not-allowed;
+	opacity: 1;
+}
+
+@media (max-width: 560px) {
+	.record-content {
+		padding: 0.5rem;
+		gap: 0.2rem;
+	}
+
+	.record-title {
+		font-size: 0.82rem;
+	}
+
+	.record-artist,
+	.record-year {
+		font-size: 0.75rem;
+	}
+
+	.record-price {
+		font-size: 0.84rem;
+	}
+
+	.record-add-button {
+		font-size: 0.78rem;
+		padding: 0.375rem 0.5rem;
+	}
+}
+
